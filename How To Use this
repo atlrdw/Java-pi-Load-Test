@@ -1,0 +1,53 @@
+Compile:
+javac PiBenchmark.java
+
+Run:
+java PiBenchmark [digits] [repsPerThread] [threads]
+
+Example Test Scenarios:
+A light, quick test (good for a laptop):
+java PiBenchmark 2000 500 4
+(Calculates 2000 digits, 500 times per thread, on 4 threads)
+
+A heavy stress test (good for a server):
+java PiBenchmark 10000 1000 32
+(Calculates 10000 digits, 1000 times per thread, on 32 threads)
+
+To compare your machines: 
+Run the exact same command on all of them (e.g., java PiBenchmark 5000 1000 8). The machine with the highest CalcPerSec score is the winner.
+
+/**
+ * PiBenchmark
+ * * A simple, cross-platform Java CPU benchmark tool that calculates Pi
+ * to a specified number of digits using multiple threads.
+ * * This tool is designed to be run from the command line to test CPU performance.
+ * * How to compile:
+ * javac PiBenchmark.java
+ * * How to run:
+ * java PiBenchmark [digits] [repsPerThread] [threads]
+ * * Arguments:
+ * [digits]:        The number of decimal places to calculate Pi (e.g., 5000)
+ * [repsPerThread]: The number of repetitions EACH thread will run (e.g., 1000)
+ * [threads]:       The number of concurrent threads to use (e.g., 8)
+ * * Example:
+ * java PiBenchmark 5000 1000 8
+ */
+
+
+Command-Line Arguments: The program will expect three arguments:
+
+[digits] (e.g., 5000)
+[repetitions] (e.g., 10000)
+[threads] (e.g., 8)
+
+Internal Logic:
+Warm-up: It will first run a warm-up loop (e.g., 10% of the requested repetitions) to allow the JIT compiler to optimize the code. This phase will not be timed.
+Threading: It will create a "thread pool" with the specified number of threads.
+
+Workload: It will divide the total [repetitions] among the available threads. For example, 10,000 reps on 8 threads means each thread does 1,250 calculations.
+Timing: It will start a high-precision timer (System.nanoTime()) right before dispatching the work to the threads and stop it after all threads have finished.
+Algorithm: It will use Java's built-in BigDecimal class to perform the Pi calculation using a computationally intensive algorithm (like a Machin-like formula). This is 100% cross-platform.
+
+Output:
+When starting, it will print a confirmation line, e.g.: Starting test: 5000 digits / 10000 repetitions / 8 threads
+When finished, it will print a single, simple line with the result: Total time: 1425.78 ms
